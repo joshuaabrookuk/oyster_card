@@ -1,2 +1,13 @@
+# In order to use public transport
+# As a customer
+# I want money on my card
+
 class Oystercard
-end 
+
+  attr_reader :balance
+
+  def initialize
+    @balance = 0
+  end
+
+end
