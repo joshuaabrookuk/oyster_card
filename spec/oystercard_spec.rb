@@ -29,5 +29,28 @@ describe Oystercard do
       expect(oystercard.deduct(20)).to eq(10)
     end
   end
-  
+
+  describe '#in_journey?' do
+    it 'Should return false on a fresh card' do
+      expect(oystercard.in_journey?).to eq false
+    end
+  end
+
+  describe '#touch_in' do
+    it 'Should change value of @in_use to true' do
+      oystercard.touch_in
+      expect(oystercard.in_use).to eq true
+    end
+  end
+
+  describe '#touch_out' do
+    it 'Should change value of @in_use to false' do
+      oystercard.touch_in
+      oystercard.touch_out
+      expect(oystercard.in_use).to eq false
+    end
+  end
+
+
+
 end
