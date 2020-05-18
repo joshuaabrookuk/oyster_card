@@ -1,12 +1,9 @@
-# In order to protect my money from theft or loss
-# As a customer
-# I want a maximum limit (of £90) on my card
-
 class Oystercard
 
   attr_reader :balance, :in_use
 
   LIMIT = 90
+  LOW = 1
 
   def initialize
     @balance = 0
@@ -28,6 +25,8 @@ class Oystercard
   end
 
   def touch_in
+    raise "Insufficient funds, current balance £#{@balance}. Minimum balance to travel £#{LOW}" if @balance < LOW
+
     @in_use = true
   end
 
