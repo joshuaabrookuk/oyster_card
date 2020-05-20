@@ -2,6 +2,8 @@ require 'oystercard'
 
 describe Oystercard do
   let(:oystercard) {Oystercard.new}
+  let(:bank) { double('entry_station') }
+
   it 'Should have an Oystercard class' do
     expect(Oystercard).to respond_to(:new)
   end
@@ -39,24 +41,37 @@ describe Oystercard do
   describe '#touch_in' do
     it 'Should change value of @in_use to true' do
       oystercard.top_up(10)
-      oystercard.touch_in
-      expect(oystercard.in_use).to eq true
+      oystercard.touch_in(bank)
+      expect(oystercard.in_journey?).to eq true
+    end
+
+    it 'should remember the entry_station after touched_in' do
+      oystercard.top_up(10)
+      oystercard.touch_in(bank)
+      expect(oystercard.entry_station).to eq bank
     end
   end
 
   describe '#touch_out' do
     it 'Should change value of @in_use to false' do
       oystercard.top_up(10)
-      oystercard.touch_in
+      oystercard.touch_in(bank)
       oystercard.touch_out
-      expect(oystercard.in_use).to eq false
+      expect(oystercard.in_journey?).to eq false
     end
-  end
 
     it 'Should deduct minimum on touch out' do
       oystercard.top_up(10)
-      oystercard.touch_in
+      oystercard.touch_in(bank)
       expect {oystercard.touch_out}.to change{oystercard.balance}.by(-Oystercard::LOW)
     end
+
+    it 'should forget about the entry_station after touched_out' do
+      oystercard.top_up(10)
+      oystercard.touch_in(bank)
+      oystercard.touch_out
+      expect(oystercard.entry_station).to be_nil
+    end
+  end
 
 end
