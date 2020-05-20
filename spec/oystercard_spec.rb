@@ -37,10 +37,6 @@ describe Oystercard do
   end
 
   describe '#touch_in' do
-    it 'Should raise an error if balance is below £1 when touching in' do
-      expect { oystercard.touch_in }.to raise_error("Insufficient funds, current balance £#{@balance.to_i}. Minimum balance to travel £#{Oystercard::LOW}")
-    end
-
     it 'Should change value of @in_use to true' do
       oystercard.top_up(10)
       oystercard.touch_in
@@ -56,4 +52,11 @@ describe Oystercard do
       expect(oystercard.in_use).to eq false
     end
   end
+
+    it 'Should deduct minimum on touch out' do
+      oystercard.top_up(10)
+      oystercard.touch_in
+      expect {oystercard.touch_out}.to change{oystercard.balance}.by(-Oystercard::LOW)
+    end
+
 end

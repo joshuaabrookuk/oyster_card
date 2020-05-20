@@ -25,13 +25,14 @@ class Oystercard
   end
 
   def touch_in
-    raise "Insufficient funds, current balance £#{@balance}. Minimum balance to travel £#{LOW}" if balance_check_under?
+    raise "Insufficient funds, current balance £#{@balance}. Minimum balance to travel £#{LOW}" if @balance < LOW
 
     @in_use = true
   end
 
   def touch_out
     @in_use = false
+    deduct(LOW)
   end
 
   private
@@ -40,8 +41,8 @@ class Oystercard
     @balance + value > LIMIT
   end
 
-  def balance_check_under?
-    @balance < LOW
-  end
+  # def balance_check_under?
+  #   @balance < LOW
+  # end
 
 end
