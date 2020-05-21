@@ -3,6 +3,7 @@ require 'oystercard'
 describe Oystercard do
   let(:oystercard) {Oystercard.new}
   let(:bank) { double('entry_station') }
+  let(:waterloo) { double('exit_station') }
 
   it 'Should have an Oystercard class' do
     expect(Oystercard).to respond_to(:new)
@@ -56,21 +57,37 @@ describe Oystercard do
     it 'Should change value of @in_use to false' do
       oystercard.top_up(10)
       oystercard.touch_in(bank)
-      oystercard.touch_out
+      oystercard.touch_out(waterloo)
       expect(oystercard.in_journey?).to eq false
     end
 
     it 'Should deduct minimum on touch out' do
       oystercard.top_up(10)
       oystercard.touch_in(bank)
-      expect {oystercard.touch_out}.to change{oystercard.balance}.by(-Oystercard::LOW)
+      expect {oystercard.touch_out(waterloo)}.to change{oystercard.balance}.by(-Oystercard::LOW)
     end
+
+    it 'should remember the exit_station after touched_out' do
+      oystercard.top_up(10)
+      oystercard.touch_in(bank)
+      oystercard.touch_out(waterloo)
+      expect(oystercard.exit_station).to eq waterloo
+    end
+
 
     it 'should forget about the entry_station after touched_out' do
       oystercard.top_up(10)
       oystercard.touch_in(bank)
-      oystercard.touch_out
+      oystercard.touch_out(waterloo)
       expect(oystercard.entry_station).to be_nil
+    end
+
+
+    it 'should expects jouney to store entry_station and exit_station' do
+      oystercard.top_up(10)
+      oystercard.touch_in(bank)
+      oystercard.touch_out(waterloo)
+      expect(oystercard.journeys).to include ({entry_station: bank, exit_station: waterloo })
     end
   end
 
