@@ -1,13 +1,13 @@
 class Oystercard
 
-  attr_reader :balance, :entry_station, :exit_station, :journeys
+
+  attr_reader :balance, :entry_station, :exit_station
 
   LIMIT = 90
   LOW = 1
 
   def initialize
     @balance = 0
-    @journeys = []
 
   end
 
@@ -33,9 +33,8 @@ class Oystercard
 
   def touch_out(station)
     @exit_station = station
-    @journeys.push({entry_station: @entry_station, exit_station: station })
-    @entry_station = nil
     deduct(LOW)
+    @entry_station = nil
   end
 
   private

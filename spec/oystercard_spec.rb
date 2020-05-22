@@ -3,7 +3,8 @@ require 'oystercard'
 describe Oystercard do
   let(:oystercard) {Oystercard.new}
   let(:bank) { double('entry_station') }
-  let(:waterloo) { double('exit_station') }
+  let (:waterloo) { double('exit_station')}
+
 
   it 'Should have an Oystercard class' do
     expect(Oystercard).to respond_to(:new)
@@ -82,13 +83,12 @@ describe Oystercard do
       expect(oystercard.entry_station).to be_nil
     end
 
-
-    it 'should expects jouney to store entry_station and exit_station' do
+    it 'should remember the exit_station after touch_out' do
       oystercard.top_up(10)
       oystercard.touch_in(bank)
       oystercard.touch_out(waterloo)
-      expect(oystercard.journeys).to include ({entry_station: bank, exit_station: waterloo })
+      expect(oystercard.exit_station).to eq waterloo
     end
   end
-
+  
 end
