@@ -5,6 +5,7 @@ describe Oystercard do
   let(:bank) { double('entry_station') }
   let (:waterloo) { double('exit_station')}
 
+
   it 'Should have an Oystercard class' do
     expect(Oystercard).to respond_to(:new)
   end
@@ -67,6 +68,14 @@ describe Oystercard do
       expect {oystercard.touch_out(waterloo)}.to change{oystercard.balance}.by(-Oystercard::LOW)
     end
 
+    it 'should remember the exit_station after touched_out' do
+      oystercard.top_up(10)
+      oystercard.touch_in(bank)
+      oystercard.touch_out(waterloo)
+      expect(oystercard.exit_station).to eq waterloo
+    end
+
+
     it 'should forget about the entry_station after touched_out' do
       oystercard.top_up(10)
       oystercard.touch_in(bank)
@@ -79,10 +88,7 @@ describe Oystercard do
       oystercard.touch_in(bank)
       oystercard.touch_out(waterloo)
       expect(oystercard.exit_station).to eq waterloo
-
     end
   end
-
-
-
+  
 end

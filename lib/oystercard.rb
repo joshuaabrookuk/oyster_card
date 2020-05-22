@@ -1,5 +1,6 @@
 class Oystercard
 
+
   attr_reader :balance, :entry_station, :exit_station
 
   LIMIT = 90
