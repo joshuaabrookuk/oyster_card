@@ -41,23 +41,25 @@ describe Oystercard do
   end
 
   describe '#touch_in' do
-    it 'Should change value of @in_use to true' do
+    before do
       oystercard.top_up(10)
       oystercard.touch_in(bank)
+    end
+    it 'Should change value of @in_use to true' do
       expect(oystercard.in_journey?).to eq true
     end
 
     it 'should remember the entry_station after touched_in' do
-      oystercard.top_up(10)
-      oystercard.touch_in(bank)
       expect(oystercard.entry_station).to eq bank
     end
   end
 
   describe '#touch_out' do
-    it 'Should change value of @in_use to false' do
+    before do
       oystercard.top_up(10)
       oystercard.touch_in(bank)
+    end
+    it 'Should change value of @in_use to false' do
       oystercard.touch_out(waterloo)
       expect(oystercard.in_journey?).to eq false
     end
@@ -69,26 +71,32 @@ describe Oystercard do
     end
 
     it 'should remember the exit_station after touched_out' do
-      oystercard.top_up(10)
-      oystercard.touch_in(bank)
       oystercard.touch_out(waterloo)
       expect(oystercard.exit_station).to eq waterloo
     end
 
 
     it 'should forget about the entry_station after touched_out' do
-      oystercard.top_up(10)
-      oystercard.touch_in(bank)
       oystercard.touch_out(waterloo)
       expect(oystercard.entry_station).to be_nil
     end
 
     it 'should remember the exit_station after touch_out' do
-      oystercard.top_up(10)
-      oystercard.touch_in(bank)
       oystercard.touch_out(waterloo)
       expect(oystercard.exit_station).to eq waterloo
     end
   end
-  
+
+  describe '#journeys' do
+    it "should be empty at the start" do
+      expect(oystercard.journeys).to eq([])
+    end
+    it "should save 1 journey" do
+      oystercard.top_up(10)
+      oystercard.touch_in(bank)
+      oystercard.touch_out(waterloo)
+      expect(oystercard.journeys).
+      to eq([{entry_station: bank, exit_station: waterloo}])
+    end
+  end
 end

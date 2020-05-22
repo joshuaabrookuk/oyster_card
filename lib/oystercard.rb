@@ -12,7 +12,8 @@ class Oystercard
   end
 
   def top_up(value)
-    raise "Maximum balance is £#{LIMIT}, current balance is £#{@balance}" if balance_check_over?(value)
+    message = "Maximum balance is £#{LIMIT}, current balance is £#{@balance}"
+    raise message if balance_check_over?(value)
 
     @balance += value
   end
@@ -26,7 +27,8 @@ class Oystercard
   end
 
   def touch_in(station)
-    raise "Insufficient funds, current balance £#{@balance}. Minimum balance to travel £#{LOW}" if @balance < LOW
+    message = "Insufficient funds, current balance £#{@balance}. Minimum balance to travel £#{LOW}"
+    raise message if @balance < LOW
     @entry_station = station
 
   end
